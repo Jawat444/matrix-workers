@@ -1,4 +1,4 @@
-name: Deploy Matrix Worker
+name: Deploy Matrix Worker (Free Plan DO Fix)
 
 on:
   push:
@@ -11,20 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ Install Wrangler
       - name: Install Wrangler
         run: npm install -g wrangler@latest
 
+      # 5️⃣ Pre-create Free plan Durable Object tables
+      - name: Pre-create v1 DO tables (Free plan)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          wrangler d1 execute matrix-db "CREATE TABLE IF NOT EXISTS RoomDurableObject (id TEXT PRIMARY KEY);"
+          wrangler d1 execute matrix-db "CREATE TABLE IF NOT EXISTS SyncDurableObject (id TEXT PRIMARY KEY);"
+          wrangler d1 execute matrix-db "CREATE TABLE IF NOT EXISTS FederationDurableObject (id TEXT PRIMARY KEY);"
+
+      # 6️⃣ Deploy Worker (all migrations applied automatically)
       - name: Deploy Worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
