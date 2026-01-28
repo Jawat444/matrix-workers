@@ -4,7 +4,6 @@
   "main": "src/index.ts",
   "compatibility_date": "2024-11-01",
   "compatibility_flags": ["nodejs_compat"],
-  "account_id": "YOUR_ACCOUNT_ID",
 
   "observability": {
     "enabled": true
@@ -15,7 +14,7 @@
     {
       "binding": "DB",
       "database_name": "matrix-db",
-      "database_id": "YOUR_DATABASE_ID"
+      "database_id": "1e489512-6cd5-4370-8af6-3ff5011c144a"
     }
   ],
 
@@ -23,27 +22,27 @@
   "kv_namespaces": [
     {
       "binding": "SESSIONS",
-      "id": "YOUR_SESSIONS_KV_ID"
+      "id": "12da2b35850c4969b1784e820524fad3"
     },
     {
       "binding": "DEVICE_KEYS",
-      "id": "YOUR_DEVICE_KEYS_KV_ID"
+      "id": "97965cf20ae24863b40d9cb70bdc14ce"
     },
     {
       "binding": "CACHE",
-      "id": "YOUR_CACHE_KV_ID"
+      "id": "89e9b83b9f7e44b5828f7995b2cf2815"
     },
     {
       "binding": "CROSS_SIGNING_KEYS",
-      "id": "YOUR_CROSS_SIGNING_KEYS_KV_ID"
+      "id": "5d2770be759240a59aa4f41e57499741"
     },
     {
       "binding": "ACCOUNT_DATA",
-      "id": "YOUR_ACCOUNT_DATA_KV_ID"
+      "id": "cbea080303f84931ab538c7dec4b9f29"
     },
     {
       "binding": "ONE_TIME_KEYS",
-      "id": "YOUR_ONE_TIME_KEYS_KV_ID"
+      "id": "1b72845b8f114357ab4e40d00fcc34e0"
     }
   ],
 
