@@ -1,11 +1,14 @@
-name: Reset Admin User
+name: Admin User Reset
 
 on:
-  workflow_dispatch:   # manual trigger
+  workflow_dispatch: # allows manual trigger from GitHub Actions
 
 jobs:
   reset-admin:
     runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -13,10 +16,6 @@ jobs:
 
       - name: Install Wrangler
         run: npm install -g wrangler@4
-
-      - name: Authenticate Wrangler
-        run: wrangler login
-        # Or use API token env variable for non-interactive: CLOUDFLARE_API_TOKEN
 
       - name: Remove old admin user
         run: |
@@ -26,15 +25,15 @@ jobs:
         id: hashpass
         run: |
           npm install bcryptjs
-          node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('NEW_PASSWORD_HERE', 10));"
-      
+          node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('NEW_PASSWORD123', 10));"
+
       - name: Add new admin user
         run: |
-          HASHED_PASSWORD=$(node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('NEW_PASSWORD_HERE', 10));")
+          HASHED_PASSWORD=$(node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('NEW_PASSWORD123', 10));")
           wrangler d1 execute matrix-db "INSERT INTO users (username, password, is_admin) VALUES ('@admin:matrix-homeserver.jawadhossain1337.workers.dev', '$HASHED_PASSWORD', 1);"
 
       - name: Create access token
         run: |
           TOKEN="ADMIN_TOKEN_$(date +%s)"
           wrangler d1 execute matrix-db "INSERT INTO access_tokens (user_id, token, valid_until) VALUES ('@admin:matrix-homeserver.jawadhossain1337.workers.dev', '$TOKEN', 4102444800);"
-          echo "New admin token: $TOKEN"
+          echo "🎉 New admin token: $TOKEN"
